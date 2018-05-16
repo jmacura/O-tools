@@ -12,7 +12,7 @@ Moznosti:
   -f "Prebor2018vysl.csv"  Cesta k souboru s vysledky
 """
 
-fname = "Prebor2018vysl.csv"
+fname = "testovaci_zavod_vysledky.csv"
 if len(sys.argv) == 3:
      if(str(sys.argv[1]) == '-f'):
          fname = sys.argv[2]
