@@ -21,15 +21,15 @@ else:
     quit()
 
 def printRes(category):
-    fh.write("{}  {:<20} {:>4}\n".format("Pořadí", "Název školy", "Body"))
+    fh.write("{}  {:<20} {:<15} {:>4}\n".format("Pořadí", "Název školy", "Město", "Body"))
     for i,t in enumerate(category):
-        fh.write(" {:>3}    {:<20} {:>4}\n".format(i+1, t[1], t[0]))
+        fh.write(" {:>3}    {:<20} {:<15} {:>4}\n".format(i+1, t[1], teams[t[1]], t[0]))
 
 # Nacteni vstupnich dat
 i = -1
 headers = []
 data = []
-important = ["Příjmení", "Jméno (křest.)", "Klasifikace", "Město", "Dlouhý", "Místo"]
+important = ["Příjmení", "Jméno (křest.)", "Klasifikace", "Název oddílu", "Město", "Krátký", "Místo"]
 with open(fname) as fh:
     for row in reader(fh, delimiter=";"):
         i += 1
@@ -52,25 +52,25 @@ with open(fname) as fh:
 no_racers = len(data)
 print("Nacteno {} zavodniku".format(no_racers))
 
-# Ulozeni skol do seznamu
-teams = []
+# Ulozeni skol do slovniku spolu s jejich mesty
+teams = {}
 for x in data:
-    if x['Město'] not in teams:
-        teams.append(x['Město'])
-print("Nalezeno {} škol".format(len(teams)))
+    if x['Název oddílu'] not in teams.keys():
+        teams[x['Název oddílu']] = x['Město'] if 'Město' in x.keys() else ""
+print("Nalezeno {} škol".format(len(teams.keys())))
 
 # Ulozeni kategorii do seznamu
 cats = []
 for x in data:
-    if x['Dlouhý'] not in cats:
-        cats.append(x['Dlouhý'])
+    if x['Krátký'] not in cats:
+        cats.append(x['Krátký'])
 print("Nalezeno {} kategorii".format(len(cats)))
 
 # Kategorie vcetne jejich obsazeni
 team_num = {cat : [] for cat in cats} # vytvoreni prazdneho slovniku
 for x in data:
-    cat = x['Dlouhý']
-    team = x['Město']
+    cat = x['Krátký']
+    team = x['Název oddílu']
     if team not in team_num[cat]:
         team_num[cat].append(team)
 #pprint(team_num)
@@ -87,13 +87,13 @@ print("Maximum skol je v kategorii {}: {} skol".format(max_cat, team_max))
 # Vypocet bodu u zavodniku
 data = [x for x in data if x['Klasifikace'] == '0'] # vyhodit DISK zavodniky, uz nejsou potreba
 for cat in cats:
-    team_score = {t: 0 for t in teams}
+    team_score = {t: 0 for t in teams.keys()}
     points = team_max*2
     for x in data:
-        if x['Dlouhý'] == cat:
-            if team_score[x['Město']] < 2:
+        if x['Krátký'] == cat:
+            if team_score[x['Název oddílu']] < 2:
                 x['body'] = points
-                team_score[x['Město']] += 1
+                team_score[x['Název oddílu']] += 1
                 points -= 1
             else:
                 x['body'] = 0
@@ -105,28 +105,28 @@ hd5 = {}
 hd79 = {}
 hds = {}
 for x in data:
-    if x['Dlouhý'] == "D3" or x['Dlouhý'] == "H3":
-        if x['Město'] in hd3.keys():
-            hd3[x['Město']] += x['body']
+    if x['Krátký'] == "D3" or x['Krátký'] == "H3":
+        if x['Název oddílu'] in hd3.keys():
+            hd3[x['Název oddílu']] += x['body']
         else:
-            hd3[x['Město']] = x['body']
-    elif x['Dlouhý'] == "D5" or x['Dlouhý'] == "H5":
-        if x['Město'] in hd5.keys():
-            hd5[x['Město']] += x['body']
+            hd3[x['Název oddílu']] = x['body']
+    elif x['Krátký'] == "D5" or x['Krátký'] == "H5":
+        if x['Název oddílu'] in hd5.keys():
+            hd5[x['Název oddílu']] += x['body']
         else:
-            hd5[x['Město']] = x['body']
-    elif x['Dlouhý'] == "D7" or x['Dlouhý'] == "H7" or x['Dlouhý'] == "D9" or x['Dlouhý'] == "H9":
-        if x['Město'] in hd79.keys():
-            hd79[x['Město']] += x['body']
+            hd5[x['Název oddílu']] = x['body']
+    elif x['Krátký'] == "D7" or x['Krátký'] == "H7" or x['Krátký'] == "D9" or x['Krátký'] == "H9":
+        if x['Název oddílu'] in hd79.keys():
+            hd79[x['Název oddílu']] += x['body']
         else:
-            hd79[x['Město']] = x['body']
-    elif x['Dlouhý'] == "DS" or x['Dlouhý'] == "HS":
-        if x['Město'] in hds.keys():
-            hds[x['Město']] += x['body']
+            hd79[x['Název oddílu']] = x['body']
+    elif x['Krátký'] == "DS" or x['Krátký'] == "HS":
+        if x['Název oddílu'] in hds.keys():
+            hds[x['Název oddílu']] += x['body']
         else:
-            hds[x['Město']] = x['body']
+            hds[x['Název oddílu']] = x['body']
     else:
-        print("Neznámá kategorie {} u závodníka/ice {} {}".format(x['Dlouhý'], x['Jméno (křest.)'], x['Příjmení']))
+        print("Neznámá kategorie {} u závodníka/ice {} {}".format(x['Krátký'], x['Jméno (křest.)'], x['Příjmení']))
 pprint(hd3)
 pprint(hd5)
 pprint(hd79)
@@ -144,7 +144,7 @@ pprint(hdsi)
 
 # Vypis vysledku do souboru
 with open("vysledky_skoly.txt", 'w', encoding="utf-8") as fh:
-    fh.write("{} závodníků\n{} škol\n{} kategorií\n".format(no_racers, len(teams), len(cats)))
+    fh.write("{} závodníků\n{} škol\n{} kategorií\n".format(no_racers, len(teams.keys()), len(cats)))
     fh.write("Nejvíce škol v jedné kategorii je {} (kat. {})\n".format(team_max, max_cat))
     fh.write("\n==== D3 + H3 ====\n")
     printRes(hd3i)

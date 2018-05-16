@@ -1,4 +1,5 @@
 *.pdf
 *.txt
-Prebor2017vysl_zk_pok.csv
-JaTRo2018E1vysl_zk.csv
+*.csv
+.~lock.*
+!testovaci_zavod_vysledky.csv
