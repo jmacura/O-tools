@@ -11,9 +11,7 @@
 	<link rel="stylesheet" href="styles.css" type="text/css" media="all">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<!--<script src="FileSaver.min.js"></script>-->
-	<!--<script src="http://rdf-ext.bergnet.org/dist/rdf-ext-all-latest.js"></script>-->
 	<script src="papaparse.min.js"></script>
-	<!--<script src="jquery.rdfquery.core.min-1.0.js"></script>-->
 	<script src="prebor_skol.js" charset="utf-8"></script>
 </head>
 
@@ -24,7 +22,7 @@
 	<h1>Výpočet přeboru škol v orientačním běhu</h1>
 	<p>Vyberte soubor s výsledky ve formátu CSV:</p>
 	<input type="file" id="files" name="files[]" multiple>
-	<output id="list"></output>
+	<output id="list" charset="windows-1250"></output>
 	<div id="info-block"><p>&nbsp;<p></div>
 	<p>&nbsp;</p>
 	<footer>
@@ -33,7 +31,7 @@
 		</div>
 		<div class="credits">
 			<a href="https://github.com/jmacura/O-tools">Zdrojový kód</a> tohoto díla podléhá licenci <a rel="license" href="https://www.mozilla.org/en-US/MPL/2.0/" target="_blank">Mozilla Public License verze 2.0</a>.
-			<p>Autor: Jan Macura, 2018</p>
+			<p>Autor: Jan Macura, 2018&ndash;2019</p>
 		</div>
 	</footer>
 </div>
