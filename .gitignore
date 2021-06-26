@@ -2,4 +2,5 @@
 *.txt
 *.csv
 .~lock.*
+!**/test/*.txt
 !testovaci_zavod_vysledky.csv
