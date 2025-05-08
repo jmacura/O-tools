@@ -6,6 +6,8 @@ Balík různých nástrojů pro orientační běh
 ## skoly
 Program pro výpočet výsledků přeboru škol
 
+Použití tohoto programu je nedoporučeno. Použijte raději https://github.com/ok-dobris/TeamResults
+
 Automaticky spočítá body pro jednotlivá školní družstva
 Program pracuje s výsledky z aplikace OE2010 ("Kramer")
 
